@@ -7,7 +7,7 @@ import java.util.Queue;
 
 
 // An implementation of Hopcroft Karp algorithm for maximum matching
-public class MaximalMatching{
+class MaximalMatching{
 
     static private final int NIL = 0;
     static private final int INF = Integer.MAX_VALUE;
@@ -51,7 +51,7 @@ public class MaximalMatching{
         int[] getpairV(){return pairV;}
 
         LinkedList<Integer> getfreenodes(){
-            LinkedList<Integer> fn = new LinkedList<Integer>();
+            LinkedList<Integer> fn = new LinkedList<>();
             int[] l1 = getpairU();
             for(int i=1;i<getm()+1;++i){
                 if(l1[i]==0){
@@ -90,10 +90,6 @@ public class MaximalMatching{
             // there is an augmenting path.
             while (bfs())
             {
-				/*System.out.println("BFS: ");
-				for(int i=1;i<pairU.length;++i){
-					System.out.println("("+i+","+pairU[i]+")");
-				}*/
                 // Find a free vertex
                 for(int u = 1; u <= size_left; u++)
 
@@ -101,10 +97,6 @@ public class MaximalMatching{
                     // an augmenting path from current vertex
                     if (pairU[u] == NIL && dfs(u)){
                         result++;
-						/*System.out.println("DFS "+u+": ");
-						for(int i=1;i<pairU.length;++i){
-							System.out.print("("+i+","+pairU[i]+")");
-						}*/
                     }
             }
             return result;
@@ -190,11 +182,8 @@ public class MaximalMatching{
             //System.out.println("");
             if (u != NIL)
             {
-                for(int i : adj[u])
+                for(int v : adj[u])
                 {
-
-                    // Adjacent to u
-                    int v = i;
 
                     // Follow the distances set by BFS
                     if (dist[pairV[v]] == dist[u] + 1)
@@ -243,20 +232,4 @@ public class MaximalMatching{
         }
     }
 
-//    public static void main(String[] args)
-//    {
-//
-//        BipGraph g = new BipGraph(3, 3);
-//        g.addLink(1, 1);
-//        g.addLink(2, 1);
-//        g.addLink(2, 3);
-//        g.addLink(3, 3);
-//        g.addLink(3, 2);
-//
-//        System.out.println("Size of maximum matching is " +
-//                g.hopcroftKarp());
-//        for(int i: g.pairU){
-//            System.out.println(i);
-//        }
-//    }
 }

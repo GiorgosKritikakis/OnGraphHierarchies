@@ -1,32 +1,40 @@
 package graphhierarchies.graph;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 
+/**
+ * The class represents a directed graph (Adjacent List).
+ */
 public class DiGraph {
-    private HashSet<Vertex> vertices;
+    private HashMap<Integer,Vertex> vertices;
     private int edges;
 
-    public int getEdges() {
-        return edges;
-    }
-
-    DiGraph(HashSet<Vertex> vertices, int edges) {
-        this.vertices = vertices;
-        this.edges = edges;
-    }
-
-    @Override
-    public String toString() {
-        StringBuffer str = new StringBuffer("");
-        for(Vertex n: vertices) {
-            str.append(n.toString());
-            str.append("\n");
+    public LinkedList<Edge> getEdgeListRepr() {
+        LinkedList<Edge> edgelist = new LinkedList<>();
+        for(Vertex v:getVertices()){
+            for (Vertex t:v.getAdjTargets()){
+                edgelist.add(new Edge(v,t));
+            }
         }
-        return str.toString();
+        return edgelist;
+    }
+
+    DiGraph(HashSet<Vertex> vertices) {
+        this.vertices = new HashMap<>();
+        for(Vertex v:vertices){
+            this.vertices.put(v.getID(),v);
+        }
     }
 
     public int verticesSize(){return this.vertices.size();}
-    public HashSet<Vertex> getVertices() {
-        return vertices;
+    public Collection<Vertex> getVertices() {
+        return vertices.values();
     }
+    public Vertex getVertex(int ID){
+        return this.vertices.get(ID);
+    }
+
 }

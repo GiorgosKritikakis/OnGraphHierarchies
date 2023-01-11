@@ -6,7 +6,7 @@ public class GraphUtil {
     static void sortAdjTargets( Vertex[] topOrder) {
         LinkedList<Vertex> sortedAdjTargets[] = new LinkedList[topOrder.length];
         for(int i=0; i<topOrder.length;++i){
-            sortedAdjTargets[i] = new LinkedList<Vertex>();
+            sortedAdjTargets[i] = new LinkedList<>();
         }
         for(int i=topOrder.length-1;i>=0;--i){
             Vertex v = topOrder[i];
@@ -21,7 +21,7 @@ public class GraphUtil {
     static void sortAdjSources( Vertex[] topOrder) {
         LinkedList<Vertex> sortedAdjSources[] = new LinkedList[topOrder.length];
         for(int i=0; i<topOrder.length;++i){
-            sortedAdjSources[i] = new LinkedList<Vertex>();
+            sortedAdjSources[i] = new LinkedList<>();
         }
         for(int i=0;i< topOrder.length;++i){
             Vertex v = topOrder[i];
@@ -38,11 +38,18 @@ public class GraphUtil {
         sortAdjTargets(topOrder);
         sortAdjSources(topOrder);
     }
+
+    /**
+     * The method assigns to every vertex a topological rank. Additionally, it returns an array of the vertices
+     * in ascending topological order.
+     * @param digraph a directed acyclic graph.
+     * @return an array of the vertices in ascending topological order
+     */
     public static final Vertex[] setTopologicalRank(DiGraph digraph) {
         Vertex sorting[] = new Vertex[digraph.verticesSize()];
         Integer RankIndex = digraph.verticesSize()-1;
-        HashMap<Vertex, Boolean> isVisited = new HashMap<Vertex, Boolean>(digraph.verticesSize());
-        LinkedList<Vertex> sources = new LinkedList<Vertex>();
+        HashMap<Vertex, Boolean> isVisited = new HashMap<>(digraph.verticesSize());
+        LinkedList<Vertex> sources = new LinkedList<>();
 
         for (Vertex n: digraph.getVertices()) {
             isVisited.put(n, false);
@@ -69,15 +76,20 @@ public class GraphUtil {
                  RankIndex = TopologicalSortUtil(dest,sorting,RankIndex, isVisited);
              }
          }
-         //System.out.println("Index:"+RankIndex+" node:"+current.getID());
          sorting[RankIndex] = current;
          return (RankIndex-1);
 
      }
+
+    /**
+     * Checks if a graph is a directed acyclic graph. It returns true if it is and false if it is not.
+     * @param digraph a directed graph
+     * @return returns true if the digraph is acyclic, otherwise, it returns false.
+     */
     public static boolean IsDirectedAcyclicGraph(DiGraph digraph){
-        HashMap<Vertex,Boolean> isVisited = new HashMap<Vertex,Boolean>( digraph.verticesSize() );
-        HashMap<Vertex,Boolean> isActive = new HashMap<Vertex,Boolean>();
-        HashMap<Vertex,Iterator<Vertex>> iterators = new HashMap<Vertex,Iterator<Vertex>>( digraph.verticesSize() );
+        HashMap<Vertex,Boolean> isVisited = new HashMap<>( digraph.verticesSize() );
+        HashMap<Vertex,Boolean> isActive = new HashMap<>();
+        HashMap<Vertex,Iterator<Vertex>> iterators = new HashMap<>( digraph.verticesSize() );
         for(Vertex n:digraph.getVertices()){
             isVisited.put(n,false);
             iterators.put( n,n.getAdjTargets().iterator() ) ;
@@ -92,12 +104,11 @@ public class GraphUtil {
         return true;
     }
 
-    public static boolean dfsFindCycle(Vertex root, HashMap<Vertex,Boolean> isVisited, HashMap<Vertex,Boolean> isActive, HashMap<Vertex,Iterator<Vertex>> iterators) {
-        Stack<Vertex> stack = new Stack<Vertex>();
+    static boolean dfsFindCycle(Vertex root, HashMap<Vertex,Boolean> isVisited, HashMap<Vertex,Boolean> isActive, HashMap<Vertex,Iterator<Vertex>> iterators) {
+        Stack<Vertex> stack = new Stack<>();
         stack.push(root);
         isActive.put(root,true);
         isVisited.put(root,true);
-        //inStack.put(root,true);
         while (!stack.isEmpty()) {
             Vertex current = stack.peek();
             Iterator<Vertex> it = iterators.get(current);
@@ -110,7 +121,6 @@ public class GraphUtil {
                         isVisited.put(adjTarget,true);
                         break;
                     }else if( isActive.get(adjTarget) ){
-                        //System.out.println("Edge: "+current.getID()+"->"+adjTarget.getID()+" form a cycle");
                         return true;
                     }
                 }else{
@@ -123,6 +133,13 @@ public class GraphUtil {
         return false;
     }
 
+    /**
+     * Returns true if there is a path from the source vertex to the target vertex. Otherwise, it returns false. It searches
+     * using a DFS function
+     * @param source The source vertex that the DFS search function starts searching.
+     * @param target The target vertex.
+     * @return true if we can reach vertex target from vertex source, otherwise, false.
+     */
     public static boolean DFS_lookup(Vertex source,Vertex target){
         Stack<Vertex> stack = new Stack<>();
         HashMap<Vertex,Boolean> isVisited = new HashMap<>();
@@ -141,9 +158,15 @@ public class GraphUtil {
         }
         return false;
     }
+
+    /**
+     * Returns all successors(not only the immediate) of a vertex.
+     * @param source the source vertex.
+     * @return a linked list that contains all successors of the source vertex
+     */
     public static LinkedList<Vertex> DFS_lookup(Vertex source){
         Stack<Vertex> stack = new Stack<>();
-        LinkedList<Vertex> result = new LinkedList<>();
+        LinkedList<Vertex> successors = new LinkedList<>();
         HashMap<Vertex,Boolean> isVisited = new HashMap<>();
         for(Vertex adj:source.getAdjTargets()) {
             stack.push(adj);
@@ -151,7 +174,7 @@ public class GraphUtil {
         while (!stack.isEmpty()){
             Vertex v = stack.pop();
             if( isVisited.get(v)==null ){
-                result.add(v);
+                successors.add(v);
                 isVisited.put(v,true);
                 for(Vertex adj:v.getAdjTargets()){
                     if(isVisited.get(adj)==null){
@@ -160,7 +183,7 @@ public class GraphUtil {
                 }
             }
         }
-        return result;
+        return successors;
     }
 
 

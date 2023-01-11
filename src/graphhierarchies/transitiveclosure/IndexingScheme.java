@@ -1,14 +1,23 @@
 package graphhierarchies.transitiveclosure;
 
 import graphhierarchies.chaindecomposition.Chain;
+import graphhierarchies.graph.Edge;
 import graphhierarchies.graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+/**
+ * The class holds an indexing scheme based on chain decomposition. These kinds of indexing schemes
+ * were introduced in the following papers:
+ * <br>- K. SIMON. “An improved algorithm for transitive closure on acyclic digraphs”.
+ * <br>- H. V. Jagadish. “A Compression Technique to Materialize Transitive Closure”.
+ * <br>The class implementation is explicated in the paper:
+ * <br>- Giorgos Kritikakis, Ioannis G. Tollis. "Fast and Practical DAG Decomposition with Reachability Applications".
+ */
 public class IndexingScheme implements TransitiveClosure{
-    private final int INF;
+    private final int INF = Integer.MAX_VALUE;
     private Indices[] vertexIndices;
     private ArrayList<Indices> []scheme;
 
@@ -17,10 +26,11 @@ public class IndexingScheme implements TransitiveClosure{
         if(source==target){return true;}
         Indices t_indices = vertexIndices[target.getTopolRank()];
         int t_chain = t_indices.chain;
-        int t_pos = getPosition(t_indices);
+
         Indices s_indices = vertexIndices[source.getTopolRank()];
         int s_index = s_indices.indices[t_chain];
-        if(s_index<=t_pos){
+        int t_index = t_indices.indices[t_chain];
+        if(s_index<t_index){
             return  true;
         }
         return false;
@@ -53,21 +63,37 @@ public class IndexingScheme implements TransitiveClosure{
         }
     }
 
+
+    /**
+     * Builds an indexing scheme based on chain decomposition following the approach that is described in the paper:
+     * <br>- Giorgos Kritikakis, Ioannis G. Tollis. "Fast and Practical DAG Decomposition with Reachability Applications".
+     * @param decomposition a chain decomposition of the graph
+     * @param topolSorting a topological sorting of the graph
+     */
     public IndexingScheme(LinkedList<Chain> decomposition, Vertex[] topolSorting){
+        create_IndexingScheme(decomposition,topolSorting,null);
+    }
+    public IndexingScheme(LinkedList<Chain> decomposition, Vertex[] topolSorting,LinkedList<Edge> Etr){
+        create_IndexingScheme(decomposition,topolSorting,Etr);
+    }
+
+    public void create_IndexingScheme(LinkedList<Chain> decomposition, Vertex[] topolSorting,LinkedList<Edge> Etr){
         //Initialization
         int kc = decomposition.size();
         scheme = new ArrayList[kc];
         vertexIndices = new Indices[topolSorting.length];
-        INF = Integer.MAX_VALUE;
+
 
         int chain_no = 0;
         for(Chain C:decomposition){
             scheme[chain_no] = new ArrayList<>(C.getVertices().size());
+
             for(Vertex v:C.getVertices()) {
                 Indices indices = new Indices(kc,v,chain_no);
                 scheme[chain_no].add(indices);
                 vertexIndices[v.getTopolRank()] = indices;
             }
+
             scheme[chain_no].trimToSize();
             ++chain_no;
         }
@@ -78,6 +104,10 @@ public class IndexingScheme implements TransitiveClosure{
             for(Vertex t:v.getAdjTargets()){
                 if( !isReachable(v,t) ){
                     update_indices(v,t);
+                }else{ //transitive edge
+                    if(Etr!=null){
+                        Etr.add( new Edge(v,t) );
+                    }
                 }
             }
         }
@@ -108,7 +138,6 @@ public class IndexingScheme implements TransitiveClosure{
             return index-1;
         }
     }
-
     public void printScheme(){
         System.out.println("\nSCHEME:");
         int chain = 0;
@@ -117,7 +146,11 @@ public class IndexingScheme implements TransitiveClosure{
             for(Indices i:C){
                 System.out.print(" [V"+i.v.getID()+":");
                 for(int index:i.indices){
-                    System.out.print(" "+index);
+                    if(index==INF){
+                        System.out.print(" -");
+                    }else {
+                        System.out.print(" " + index);
+                    }
                 }
                 System.out.print("] ");
             }

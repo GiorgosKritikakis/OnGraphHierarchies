@@ -8,10 +8,20 @@ import java.util.LinkedList;
 
 import static graphhierarchies.graph.GraphUtil.DFS_lookup;
 
+/**
+ * The class computes the transitive closure and keeps the results in an 2D adjacency matrix to answer reachability queries in constant time.
+ * The construction of the 2D matrix needs O(|V|*|E|) time, where V is the set of vertices and E the set of edges.
+ */
 public class AdjMatrix implements TransitiveClosure{
-    private boolean adjmatrix[][];
+    private final boolean[][] adjmatrix;
     HashMap<Vertex,Integer> IDs;
     HashMap<Integer,Vertex> IDtoVertex;
+
+    /**
+     * Computes the transitive closure of graph g and keeps the results in an 2D adjacency matrix in O(|V|*|E|) time,
+     * where V is the set of vertices and E the set of edges.
+     * @param g is the input graph
+     */
     public AdjMatrix(DiGraph g){
         adjmatrix = new boolean[g.verticesSize()][g.verticesSize()];
         IDs = new HashMap<>();
