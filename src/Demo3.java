@@ -19,7 +19,7 @@ public class Demo3 {
     public static void main(String[] args) {
         final File folder = new File("InputGraphs");
         LinkedList<File> files = new LinkedList<>();
-        Main.listFilesFromFolder(folder,files);
+        listFilesFromFolder(folder,files);
         for(File f : files) {
             DiGraph dag = Reader.ReadEdgeList(f);
             Vertex[] TopOrder = GraphUtil.setTopologicalRank(dag);
@@ -28,7 +28,7 @@ public class Demo3 {
                // Vertex[] TopOrder = GraphUtil.setTopologicalRank(dag);
                 GraphUtil.sortAdjLists(TopOrder);
 
-                /**Uncomment the next two lines to perform sparsification*/
+                //Uncomment the next two lines to perform sparsification
                 //LinkedList<Chain> decomposition_co = ChainDecomposition.COH(TopOrder);  //build a chain decomposition to utilize it for sparsification.
                 //ChainDecomposition.sparsify(decomposition_co,TopOrder);                 //sparsifies the graph utilizing a chain decomposition in linear time.
 
