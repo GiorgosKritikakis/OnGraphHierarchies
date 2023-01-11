@@ -11,8 +11,8 @@ import java.util.LinkedList;
 /**
  * The class holds an indexing scheme based on chain decomposition. These kinds of indexing schemes
  * were introduced in the following papers:
- * <br>- K. SIMON. “An improved algorithm for transitive closure on acyclic digraphs”.
- * <br>- H. V. Jagadish. “A Compression Technique to Materialize Transitive Closure”.
+ * <br>- K. SIMON. An improved algorithm for transitive closure on acyclic digraphs.
+ * <br>- H. V. Jagadish. A Compression Technique to Materialize Transitive Closure.
  * <br>The class implementation is explicated in the paper:
  * <br>- Giorgos Kritikakis, Ioannis G. Tollis. "Fast and Practical DAG Decomposition with Reachability Applications".
  */
