@@ -16,7 +16,7 @@ import java.util.LinkedList;
  */
 public class Demo2 {
     public static void main(String[] args) {
-        File f = new File("inputGraphs/graph1");
+        File f = new File("inputGraphs/graph1.csv");
         DiGraph dag = Reader.ReadEdgeList(f); //reads the input file and creates a digraph
 
         //The class GraphUtil contains some helpful functionality.

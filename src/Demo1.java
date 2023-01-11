@@ -33,7 +33,7 @@ public class Demo1 {
         DiGraph dag1 = Reader.ReadEdgeList(edgelist);
 
         //Creating a graph from a file.
-        File f = new File("inputGraphs/graph1");
+        File f = new File("inputGraphs/graph1.csv");
         DiGraph dag2 = Reader.ReadEdgeList(f);
     }
 }
