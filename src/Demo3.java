@@ -22,13 +22,10 @@ public class Demo3 {
         Main.listFilesFromFolder(folder,files);
         for(File f : files) {
             DiGraph dag = Reader.ReadEdgeList(f);
-            if(!GraphUtil.IsDirectedAcyclicGraph(dag)){
-                System.out.println(f.getName()+" is not acyclic");
-                continue;
-            }
-            if (GraphUtil.IsDirectedAcyclicGraph(dag)) {
+            Vertex[] TopOrder = GraphUtil.setTopologicalRank(dag);
+            if (TopOrder!=null) {
 
-                Vertex[] TopOrder = GraphUtil.setTopologicalRank(dag);
+               // Vertex[] TopOrder = GraphUtil.setTopologicalRank(dag);
                 GraphUtil.sortAdjLists(TopOrder);
 
                 /**Uncomment the next two lines to perform sparsification*/
@@ -46,6 +43,8 @@ public class Demo3 {
                 LinkedList<Edge> Etr = new LinkedList<>(); //In this list we add the transitive edges.
                 IndexingScheme tr = new IndexingScheme(decomposition_fcd,TopOrder,Etr); //we calculate the indexing scheme and we detect all transitive edges.
                 System.out.println(" Etr: "+Etr.size());
+            }else{
+                System.out.println(f.getName()+" is not acyclic");
             }
         }
     }

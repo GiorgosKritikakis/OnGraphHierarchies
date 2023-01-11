@@ -41,11 +41,49 @@ public class GraphUtil {
 
     /**
      * The method assigns to every vertex a topological rank. Additionally, it returns an array of the vertices
-     * in ascending topological order.
-     * @param digraph a directed acyclic graph.
-     * @return an array of the vertices in ascending topological order
+     * in ascending topological order. If there is a cycle in the graph, returns null.
+     * @param dag a directed acyclic graph.
+     * @return null if the graph is not acyclic otherwise an array of the vertices in ascending topological order.
      */
-    public static final Vertex[] setTopologicalRank(DiGraph digraph) {
+    public static  Vertex[] setTopologicalRank(DiGraph dag) {
+        Vertex sorting[] = new Vertex[dag.verticesSize()];
+        int rank = 0;
+        HashMap<Vertex, Integer> indegree = new HashMap<>(dag.verticesSize());
+        LinkedList<Vertex> sources = new LinkedList<>();
+
+        for (Vertex n: dag.getVertices()) {
+            indegree.put(n,n.getAdjSources().size());
+            if(n.getAdjSources().isEmpty()){
+                sources.add(n);
+            }
+        }
+
+        while(!sources.isEmpty()){
+            Vertex v = sources.removeFirst();
+            v.setTopolRank(rank);
+            sorting[rank] = v;
+            rank++;
+            for(Vertex t:v.getAdjTargets()){
+                Integer in = indegree.get(t);
+                --in;
+                indegree.put(t,in);
+                if(in==0){
+                    sources.add(t);
+                }
+            }
+        }
+        if(rank!=dag.verticesSize()){
+            for(Vertex v:sorting){
+                if(v==null){
+                    break;
+                }
+                v.setTopolRank(0);
+            }
+            return null;
+        }
+        return sorting;
+    }
+    public static Vertex[] setTopologicalRank_rec(DiGraph digraph) {
         Vertex sorting[] = new Vertex[digraph.verticesSize()];
         Integer RankIndex = digraph.verticesSize()-1;
         HashMap<Vertex, Boolean> isVisited = new HashMap<>(digraph.verticesSize());
@@ -84,7 +122,7 @@ public class GraphUtil {
     /**
      * Checks if a graph is a directed acyclic graph. It returns true if it is and false if it is not.
      * @param digraph a directed graph
-     * @return returns true if the digraph is acyclic, otherwise, it returns false.
+     * @return true if the digraph is acyclic, otherwise, false.
      */
     public static boolean IsDirectedAcyclicGraph(DiGraph digraph){
         HashMap<Vertex,Boolean> isVisited = new HashMap<>( digraph.verticesSize() );
