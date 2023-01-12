@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Queue;
 
 
-// An implementation of Hopcroft Karp algorithm for maximum matching
+/**
+ *  An implementation of Hopcroft Karp algorithm for maximum matching
+ */
 class MaximalMatching{
 
     static private final int NIL = 0;

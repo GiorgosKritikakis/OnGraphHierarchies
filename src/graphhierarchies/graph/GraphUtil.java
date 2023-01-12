@@ -1,6 +1,9 @@
 package graphhierarchies.graph;
 import java.util.*;
 
+/**
+ * The class contains several utility functions for directed graphs.
+ */
 public class GraphUtil {
     private GraphUtil() {}
     static void sortAdjTargets( Vertex[] topOrder) {
@@ -34,6 +37,11 @@ public class GraphUtil {
         }
     }
 
+    /**
+     * The method sorts the adjacency target lists of each vertex in ascending topological order and the adjacency
+     * source lists in descending.
+     * @param topOrder a topological sorting of the graph
+     */
     public static void sortAdjLists(Vertex[] topOrder){
         sortAdjTargets(topOrder);
         sortAdjSources(topOrder);
@@ -46,7 +54,7 @@ public class GraphUtil {
      * @return null if the graph is not acyclic otherwise an array of the vertices in ascending topological order.
      */
     public static  Vertex[] setTopologicalRank(DiGraph dag) {
-        Vertex sorting[] = new Vertex[dag.verticesSize()];
+        Vertex[] sorting = new Vertex[dag.verticesSize()];
         int rank = 0;
         HashMap<Vertex, Integer> indegree = new HashMap<>(dag.verticesSize());
         LinkedList<Vertex> sources = new LinkedList<>();

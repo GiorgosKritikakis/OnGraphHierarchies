@@ -2,6 +2,11 @@ package graphhierarchies.graph;
 
 import java.util.LinkedList;
 
+/**
+ * This class represents a vertex. It consists of the unique vertex ID and the adjacency lists. Furthermore, since this
+ * project examines particularly DAGs, there is a field topolRank that represents the topological ranking of a vertex
+ * and is assigned by a topological sorting algorithm.
+ */
 public class Vertex {
     private int ID;
     private int topolRank;

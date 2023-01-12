@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
- * The class represents a directed graph (Adjacent List).
+ * The class represents a directed graph.
  */
 public class DiGraph {
     private HashMap<Integer,Vertex> vertices;

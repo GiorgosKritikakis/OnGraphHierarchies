@@ -1,5 +1,8 @@
 package graphhierarchies.graph;
 
+/**
+ * The class represents an edge that goes from the vertex source to the vertex target.
+ */
 public class Edge {
     private Vertex source;
     private Vertex target;
